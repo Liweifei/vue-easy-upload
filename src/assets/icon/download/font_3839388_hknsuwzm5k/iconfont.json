@@ -1,0 +1,30 @@
+{
+  "id": "3839388",
+  "name": "vue-easy-upload2",
+  "font_family": "veufont",
+  "css_prefix_text": "veui-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "145497",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "577357",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e74b",
+      "unicode_decimal": 59211
+    },
+    {
+      "icon_id": "5732758",
+      "name": "搜索放大",
+      "font_class": "sousuofangda",
+      "unicode": "ec32",
+      "unicode_decimal": 60466
+    }
+  ]
+}
