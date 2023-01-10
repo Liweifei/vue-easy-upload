@@ -27,7 +27,7 @@ Vue2.x
 ```
 ## 效果图
 
-![效果图](./dist/demo.jpg)
+![效果图](./demo.jpg)
 
 ## Attribute
 
