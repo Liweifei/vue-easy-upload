@@ -70,6 +70,10 @@ import fileList from "../src/assets/FileList/fileList";
 export default {
   name: "vue-easy-upload",
   props: {
+    value: {
+      type: Array,
+      default: () => [],
+    },
     noBtn: {
       //不需要上传按钮，按钮可自定义
       type: Boolean,
@@ -117,7 +121,7 @@ export default {
     filedList: {
       type: Array,
       default: () => {
-        return ["name","size","createPerson","date"];
+        return ["name", "size", "createPerson", "date"];
       },
     },
     max: {
@@ -180,6 +184,12 @@ export default {
       },
       immediate: true,
     },
+    realFileList: {
+      handler(val) {
+        this.$emit("input", val);
+      },
+      immediate: true,
+    },
   },
   computed: {
     isLoading() {
@@ -202,8 +212,8 @@ export default {
     showUpload() {
       this.isLoading || this.$refs[this.id].click();
     },
-    checkfiledInfo(filed){
-      return this.filedList.includes(filed)
+    checkfiledInfo(filed) {
+      return this.filedList.includes(filed);
     },
     getFileUrl(file) {
       //获取文件地址

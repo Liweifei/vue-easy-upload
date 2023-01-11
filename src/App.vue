@@ -2,6 +2,7 @@
   <div class="uploadBox">
     <!-- <vue-easy-upload create-person="lwf" multiple max="2"> -->
     <vue-easy-upload
+      v-model="relList"
       :hint="false"
       :file-list="fileList"
       :filed-list='["name","size","date"]'
@@ -17,6 +18,7 @@
     </vue-easy-upload>
     <!-- edit list -->
     <br />
+    <button @click="getRealList"><h2>获取时时数据</h2></button>
     <button @click="manualUpload"><h2>手动上传</h2></button>
     <br />
     <br />
@@ -66,6 +68,7 @@ export default {
   name: "App",
   data() {
     return {
+      relList: [],
       fileList: [],
     };
   },
@@ -74,6 +77,10 @@ export default {
     manualUpload() {
       //手动上传发起
       this.$refs.veu.manualUpload();
+    },
+    getRealList() {
+      //获取时时数据
+      console.log(this.relList);
     },
     onErrorTrap(param){//无手动上传数据时提示
       console.log(param.msg)
