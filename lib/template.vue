@@ -2,42 +2,35 @@
   <div class="vue-easy-upload">
     <div class="FileList" :class="{ doubleRow: doubleRow }">
       <ul>
-        <li class="fileItem" v-for="(item, index) in realFileList" :key="index">
+        <li class="fileItem" v-for="(item, index) in realFileList" :key="index"
+          :class="{ already: item.already, [item.type]: true }">
           <span class="iconBox">
-            <img
-              :src="item.url"
-              alt=""
-              v-if="item.type === 'image'"
-              @click="handleView(item)"
-            />
+            <img :src="item.url" alt="" v-if="item.type === 'image'" @click="handleView(item)" />
             <img :src="iconClass[item.type]" alt="" v-else />
           </span>
           <span class="name">
-            <span class="nameText" v-if="checkfiledInfo('name')">{{ item.name }}</span
-            ><span class="size" v-if="checkfiledInfo('size')">
-              <span class="sizeLabel" v-if="doubleRow"
-                ><slot name="sizelabel">大小：</slot></span
-              >{{ item.size }}</span
-            ><span class="createPerson" v-if="checkfiledInfo('createPerson')"
-              ><span class="personLabel" v-if="doubleRow"
-                ><slot name="personlabel">上传人：</slot></span
-              >{{ item.createPerson }}</span
-            ><span class="date" v-if="checkfiledInfo('date')"
-              ><span class="dateLabel" v-if="doubleRow"
-                ><slot name="datelabel">上传日期：</slot></span
-              >{{ item.date }}</span
-            >
+            <span class="nameText" v-if="checkfiledInfo('name')">{{ item.name }}</span><span class="size"
+              v-if="checkfiledInfo('size')">
+              <span class="sizeLabel" v-if="doubleRow">
+                <slot name="sizelabel">大小：</slot>
+              </span>{{ item.size }}</span><span class="createPerson" v-if="checkfiledInfo('createPerson')"><span
+                class="personLabel" v-if="doubleRow">
+                <slot name="personlabel">上传人：</slot>
+              </span>{{ item.createPerson }}</span><span class="date" v-if="checkfiledInfo('date')"><span
+                class="dateLabel" v-if="doubleRow">
+                <slot name="datelabel">上传日期：</slot>
+              </span>{{ item.date }}</span>
           </span>
           <div class="handleBtnBox">
             <span class="handleBtn" @click="handleView(item)">
               <slot name="preview">
                 <i class="handleBtn veufont veui-sousuofangda"></i>
-              </slot> </span
-            ><span class="handleBtn" @click="handleDownload(item)" v-if="readonly">
+              </slot>
+            </span><span class="handleBtn" @click="handleDownload(item)" v-if="readonly">
               <slot name="download">
                 <i class="veufont veui-xiazai"></i>
-              </slot> </span
-            ><span class="handleBtn" @click="handleDelete(item)" v-else>
+              </slot>
+            </span><span class="handleBtn" @click="handleDelete(item)" v-else>
               <slot name="delete">
                 <i class="veufont veui-shanchu"></i>
               </slot>
@@ -48,18 +41,11 @@
     </div>
     <div class="btnBox" v-if="!noBtn && !readonly">
       <label @click="showUpload" class="btn" :class="{ disabled: isLoading }">
-        <slot name="title">{{ title }}</slot> </label
-      ><span class="hint" v-show="hint">{{ hint }}</span>
+        <slot name="title">{{ title }}</slot>
+      </label><span class="hint" v-show="hint">{{ hint }}</span>
     </div>
-    <input
-      type="file"
-      v-show="false"
-      name="vue-easy-upload"
-      :ref="id"
-      :accept="accept"
-      :multiple="multiple"
-      @change="hanldeFileChange"
-    />
+    <input type="file" v-show="false" name="vue-easy-upload" :ref="id" :accept="accept" :multiple="multiple"
+      @change="hanldeFileChange" />
   </div>
 </template>
 
@@ -428,7 +414,7 @@ export default {
       });
     },
   },
-  created() {},
+  created() { },
 };
 </script>
 
