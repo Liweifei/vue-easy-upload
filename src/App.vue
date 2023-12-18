@@ -10,6 +10,8 @@
       multiple
       max="4"
       double-row
+      :on-upload="onUpload"
+      :onManualUpload="onManualUpload"
       @error-trap="onErrorTrap"
     >
       <template #title>
@@ -32,7 +34,7 @@
       create-person="lwf2"
       multiple
       max="2"
-      :size-limit="100000"
+      :size-limit="1000000"
       @exceed="onExceed"
       @size-limit="onSizelimit"
       :file-list="fileList"
@@ -129,7 +131,9 @@ export default {
       console.log(file);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve({ id: 666 });
+          resolve(file.map(()=>{
+            return {id:Math.random()}
+          }));
           // reject()
         }, 100);
       });
