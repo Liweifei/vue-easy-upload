@@ -1,4 +1,4 @@
-## vue-easy-upload(当前版本 V1.0.6)
+## vue-easy-upload(当前版本 V1.0.7)
 
 > 简单、高效的 vue 文件上传组件
 
