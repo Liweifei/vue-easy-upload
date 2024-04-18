@@ -10,6 +10,7 @@
       multiple
       max="4"
       double-row
+      always-show-btn
       :on-upload="onUpload"
       :onManualUpload="onManualUpload"
       @error-trap="onErrorTrap"

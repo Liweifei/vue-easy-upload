@@ -1,7 +1,7 @@
 {
   "name": "vue-easy-upload",
   "description": "vue文件上传",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "Liweifei <1195669615@qq.com>",
   "license": "MIT",
   "private": false,
@@ -13,10 +13,6 @@
   "files": [
     "dist"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Liweifei/vue-easy-upload.git"
-  },
   "dependencies": {
     "dayjs": "^1.11.7",
     "vue": "^2.6.12"

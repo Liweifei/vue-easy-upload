@@ -43,12 +43,12 @@
             ><span
               class="handleBtn"
               @click="handleDownload(item)"
-              v-if="readonly"
+              v-if="readonly || alwaysShowBtn"
             >
               <slot name="download">
                 <i class="veufont veui-xiazai"></i>
               </slot> </span
-            ><span class="handleBtn" @click="handleDelete(item)" v-else>
+            ><span class="handleBtn" @click="handleDelete(item)" v-if="!readonly || alwaysShowBtn">
               <slot name="delete">
                 <i class="veufont veui-shanchu"></i>
               </slot>
@@ -107,6 +107,10 @@ export default {
       default: "YYYY.MM.DD",
     },
     readonly: {
+      type: Boolean,
+      default: false,
+    },
+    alwaysShowBtn: {
       type: Boolean,
       default: false,
     },
