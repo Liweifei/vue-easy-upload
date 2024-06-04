@@ -11,7 +11,7 @@
       max="4"
       double-row
       always-show-btn
-      :on-upload="onUpload"
+      ready-no-delete
       :onManualUpload="onManualUpload"
       @error-trap="onErrorTrap"
     >
@@ -136,7 +136,7 @@ export default {
             return {id:Math.random()}
           }));
           // reject()
-        }, 100);
+        }, 2100);
       });
     },
     onDelete(file) {

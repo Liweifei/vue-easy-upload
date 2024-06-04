@@ -18,9 +18,7 @@
             <img :src="iconClass[item.type]" alt="" v-else />
           </span>
           <span class="name">
-            <span class="nameText" v-if="checkfiledInfo('name')">{{
-              item.name
-            }}</span
+            <span class="nameText" v-if="checkfiledInfo('name')">{{ item.name }}</span
             ><span class="size" v-if="checkfiledInfo('size')">
               <span class="sizeLabel" v-if="doubleRow">
                 <slot name="sizelabel">大小：</slot> </span
@@ -48,7 +46,11 @@
               <slot name="download">
                 <i class="veufont veui-xiazai"></i>
               </slot> </span
-            ><span class="handleBtn" @click="handleDelete(item)" v-if="!readonly || alwaysShowBtn">
+            ><span
+              class="handleBtn"
+              @click="handleDelete(item)"
+              v-if="checkReadyNoDelete(item)"
+            >
               <slot name="delete">
                 <i class="veufont veui-shanchu"></i>
               </slot>
@@ -111,6 +113,11 @@ export default {
       default: false,
     },
     alwaysShowBtn: {
+      type: Boolean,
+      default: false,
+    },
+    readyNoDelete: {
+      //是否只能未上传时可删除(权限大于always-show-btn)
       type: Boolean,
       default: false,
     },
@@ -226,6 +233,13 @@ export default {
     },
     showUpload() {
       this.isLoading || this.$refs[this.id].click();
+    },
+    checkReadyNoDelete(item) {
+      let io=!this.readonly || this.alwaysShowBtn;
+      if (this.readyNoDelete) {//如何只能未上传时可删除，那么做为最终权限
+        io= !item.already;
+      }
+      return io;
     },
     checkfiledInfo(filed) {
       return this.filedList.includes(filed);
@@ -361,7 +375,7 @@ export default {
     doAdd(files, paramList = false) {
       this.delLoading();
       const date = new Date();
-      const formatList=files.map((blob, index) => {
+      const formatList = files.map((blob, index) => {
         let item = {
           already: !!paramList, //有回调说明上传成功=>置为已经上传
           createPerson: this.createPerson,
