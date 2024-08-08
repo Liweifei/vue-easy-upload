@@ -451,14 +451,20 @@ export default {
               type: 0, //无上传数据
               msg: "请选择文件进行上传",
             });
-            reject();
+            reject({
+              type: 0, //无上传数据
+              msg: "请选择文件进行上传",
+            });
           }
         } else {
           this.$emit("error-trap", {
             type: 1, //未设置上传方法
             msg: "未设置上传方法",
           });
-          reject();
+          reject({
+            type: 1, //未设置上传方法
+            msg: "未设置上传方法",
+          });
         }
       });
     },
