@@ -74,7 +74,7 @@ export default {
     fragmentSize: {
       //分片大小
       type: Number,
-      default: 5 * 1024 * 1024,//5M
+      default: 2 * 1024 * 1024,//2M
     },
     title: {
       type: String,
