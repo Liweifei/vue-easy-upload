@@ -2,55 +2,35 @@
   <div class="vue-easy-upload">
     <div class="FileList" :class="{ doubleRow: doubleRow }">
       <ul>
-        <li
-          class="fileItem"
-          v-for="(item, index) in realFileList"
-          :key="index"
-          :class="{ already: item.already, [item.type]: true }"
-        >
+        <li class="fileItem" v-for="(item, index) in realFileList" :key="index"
+          :class="{ already: item.already, [item.type]: true }">
           <span class="iconBox">
-            <img
-              :src="item.url"
-              alt=""
-              v-if="item.type === 'image'"
-              @click="handleView(item)"
-            />
+            <img :src="item.url" alt="" v-if="item.type === 'image'" @click="handleView(item)" />
             <img :src="iconClass[item.type]" alt="" v-else />
           </span>
           <span class="name">
-            <span class="nameText" v-if="checkfiledInfo('name')">{{ item.name }}</span
-            ><span class="size" v-if="checkfiledInfo('size')">
+            <span class="nameText" v-if="checkfiledInfo('name')">{{ item.name }}</span><span class="size"
+              v-if="checkfiledInfo('size')">
               <span class="sizeLabel" v-if="doubleRow">
-                <slot name="sizelabel">大小：</slot> </span
-              >{{ item.size }}</span
-            ><span class="createPerson" v-if="checkfiledInfo('createPerson')"
-              ><span class="personLabel" v-if="doubleRow">
-                <slot name="personlabel">上传人：</slot> </span
-              >{{ item.createPerson }}</span
-            ><span class="date" v-if="checkfiledInfo('date')"
-              ><span class="dateLabel" v-if="doubleRow">
-                <slot name="datelabel">上传日期：</slot> </span
-              >{{ item.date }}</span
-            >
+                <slot name="sizelabel">大小：</slot>
+              </span>{{ item.size }}</span><span class="createPerson" v-if="checkfiledInfo('createPerson')"><span
+                class="personLabel" v-if="doubleRow">
+                <slot name="personlabel">上传人：</slot>
+              </span>{{ item.createPerson }}</span><span class="date" v-if="checkfiledInfo('date')"><span
+                class="dateLabel" v-if="doubleRow">
+                <slot name="datelabel">上传日期：</slot>
+              </span>{{ item.date }}</span>
           </span>
           <div class="handleBtnBox">
             <span class="handleBtn" @click="handleView(item)">
               <slot name="preview">
                 <i class="handleBtn veufont veui-sousuofangda"></i>
-              </slot> </span
-            ><span
-              class="handleBtn"
-              @click="handleDownload(item)"
-              v-if="readonly || alwaysShowBtn"
-            >
+              </slot>
+            </span><span class="handleBtn" @click="handleDownload(item)" v-if="readonly || alwaysShowBtn">
               <slot name="download">
                 <i class="veufont veui-xiazai"></i>
-              </slot> </span
-            ><span
-              class="handleBtn"
-              @click="handleDelete(item)"
-              v-if="checkReadyNoDelete(item)"
-            >
+              </slot>
+            </span><span class="handleBtn" @click="handleDelete(item)" v-if="checkReadyNoDelete(item)">
               <slot name="delete">
                 <i class="veufont veui-shanchu"></i>
               </slot>
@@ -61,18 +41,11 @@
     </div>
     <div class="btnBox" v-if="!noBtn && !readonly">
       <label @click="showUpload" class="btn" :class="{ disabled: isLoading }">
-        <slot name="title">{{ title }}</slot> </label
-      ><span class="hint" v-show="hint">{{ hint }}</span>
+        <slot name="title">{{ title }}</slot>
+      </label><span class="hint" v-show="hint">{{ hint }}</span>
     </div>
-    <input
-      type="file"
-      v-show="false"
-      name="vue-easy-upload"
-      :ref="id"
-      :accept="accept"
-      :multiple="multiple"
-      @change="hanldeFileChange"
-    />
+    <input type="file" v-show="false" name="vue-easy-upload" :ref="id" :accept="accept" :multiple="multiple"
+      @change="hanldeFileChange" />
   </div>
 </template>
 
@@ -80,6 +53,7 @@
 import util from "./util";
 import dayjs from "dayjs";
 import fileList from "../src/assets/FileList/fileList";
+import cutFile from "./cutFile";
 export default {
   name: "vue-easy-upload",
   props: {
@@ -91,6 +65,16 @@ export default {
       //不需要上传按钮，按钮可自定义
       type: Boolean,
       default: false,
+    },
+    fragment: {
+      //是否分片
+      type: Boolean,
+      default: false,
+    },
+    fragmentSize: {
+      //分片大小
+      type: Number,
+      default: 5 * 1024 * 1024,//5M
     },
     title: {
       type: String,
@@ -235,9 +219,9 @@ export default {
       this.isLoading || this.$refs[this.id].click();
     },
     checkReadyNoDelete(item) {
-      let io=!this.readonly || this.alwaysShowBtn;
+      let io = !this.readonly || this.alwaysShowBtn;
       if (this.readyNoDelete) {//如何只能未上传时可删除，那么做为最终权限
-        io= !item.already;
+        io = !item.already;
       }
       return io;
     },
@@ -354,29 +338,38 @@ export default {
       this.loadingNum--;
       this.loadingNum = this.loadingNum || 0;
     },
-    handleUpload(files) {
+    async handleUpload(files) {
+      console.log(files);
+      let uploadFiles = files;
+      if (this.fragment) {
+        console.time("cut-start")
+        uploadFiles = await cutFile(files, this.fragmentSize);
+        console.timeEnd("cut-start")
+        console.log(uploadFiles)
+      }
       if (this.onUpload && typeof this.onUpload === "function") {
-        const cb = this.onUpload(files);
+        const cb = this.onUpload(uploadFiles);
         if (cb && cb.then) {
           this.addLoading();
           cb.then((param) => {
             //上传成功自定义方法需要提供id、createPerson等必要信息
-            this.doAdd(files, param);
+            this.doAdd(uploadFiles, param);
           }).catch(() => {
             this.delLoading();
           });
         } else if (cb) {
-          this.doAdd(files, cb);
+          this.doAdd(uploadFiles, cb);
         }
       } else {
-        this.doAdd(files);
+        this.doAdd(uploadFiles);
       }
     },
     doAdd(files, paramList = false) {
       this.delLoading();
       const date = new Date();
-      const formatList = files.map((blob, index) => {
-        let item = {
+      const formatList = files.map((fileItem, index) => {
+        const blob = this.fragment ? fileItem.file : fileItem;
+        const item = {
           already: !!paramList, //有回调说明上传成功=>置为已经上传
           createPerson: this.createPerson,
           dateTime: date,
@@ -387,6 +380,12 @@ export default {
           type: util.getFileType(blob),
           size: util.formatFileSize(blob.size || blob.fileSize), //文件名，根据接口返回信息去设置
         };
+        if (this.fragment && blob.size > this.fragmentSize) {
+          const { totalChunks, splitChunks, fileHash } = fileItem;
+          item.totalChunks = totalChunks;
+          item.splitChunks = splitChunks;
+          item.fileHash = fileHash;
+        }
         Array.isArray(paramList) && Object.assign(item, paramList[index]);
         return item;
       });
@@ -477,7 +476,7 @@ export default {
       });
     },
   },
-  created() {},
+  created() { },
 };
 </script>
 

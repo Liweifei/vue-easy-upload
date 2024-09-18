@@ -8,8 +8,11 @@
       :filed-list='["name","size","date"]'
       ref="veu"
       multiple
+      accept=".rar"
+      :size-limit="500 * 1024 * 1024"
       max="4"
       double-row
+      fragment
       always-show-btn
       ready-no-delete
       :onManualUpload="onManualUpload"
@@ -92,6 +95,7 @@ export default {
       //手动上传request
       return new Promise((resolve, reject) => {
         setTimeout(() => {
+          console.error("manua",fileList);
           const list = fileList.map((item) => {
             return {
               id: Math.random(),

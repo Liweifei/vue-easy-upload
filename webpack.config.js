@@ -2,7 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: process.env.NODE_ENV==='development'?'./src/main.js':'./lib/index.js',//开发和打包入口不同,
+  entry: process.env.NODE_ENV === 'development' ? './src/main.js' : './lib/index.js',//开发和打包入口不同,
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -17,7 +17,7 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -36,6 +36,15 @@ module.exports = {
         loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]'
+        }
+      },
+      {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader', options: {
+            // Web Worker 代码将内联到主文件中
+            inline: true
+          }
         }
       }
     ]
